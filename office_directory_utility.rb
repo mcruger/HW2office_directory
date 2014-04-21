@@ -12,7 +12,10 @@ def init_bucket(bucket_name)
 		puts "Bucket '#{bucket_name}' already exists. Adding to this bucket."
 	else
 		# create a bucket
-		b = @s3.buckets.create(bucket_name)
+		b = @s3.buckets.create(bucket_name, :acl => :public_read)
+		#b.configure_website do |cfg|
+		 # cfg.index_document_suffix = 'index.html'
+		#end
 		puts "Bucket '#{bucket_name}' created."
 	end
 	#puts " " #blank line for readibility
@@ -32,10 +35,11 @@ def add_file_to_bucket(bucket_name, file_name)
 			# upload a file
 			basename = File.basename(file_name)
 			o = bucket.objects[basename]
-			o.write(:file => file_name)
+			#o.acl = "public_read"
+			o.write(:file => file_name, :acl => :public_read)
 
-		#	puts "Uploaded #{file_name} to:"
-		#	puts o.public_url
+			puts "Uploaded #{file_name} to:"
+			puts o.public_url
 
 			#generate a presigned URL
 		#	puts "\nURL to download the file:"
@@ -135,8 +139,8 @@ def gen_html_push_to_bucket(employeeHash, bucket_name)
 			f.write("<br />")  
 		end
 		#upload index file
-		add_file_to_bucket(bucket_name, "index.html")
 	end
+	add_file_to_bucket(bucket_name, "index.html")
 
 	#write individual html pages for each office
 	employeeHash.each do |city, employees|

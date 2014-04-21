@@ -46,6 +46,7 @@ while using_prog == true do
 	if mod_city == "save"
 		#generate html pages and push to bucket
 		gen_html_push_to_bucket(employeeHash, bucket_name)
+		puts ""
 		puts "Changes saved and office directory updated!"
 		puts ""
 		next
